@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
+
 
 const userSchema=new mongoose.Schema({
     username:{
@@ -29,6 +32,23 @@ const userSchema=new mongoose.Schema({
     {
         timestamps:true
     });
+
+    //in order to encyrpt and check user
+ userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+
+    this.password = await bcrypt.hash(this.password, 10);
+
+    next();
+});
+
+//password check
+userSchema.methods.isPasswordCorrect=async function(password){
+    return await bcrypt.compare(password,this.password)
+}
+
+
+
 
 
     const User=mongoose.model('User',userSchema);
