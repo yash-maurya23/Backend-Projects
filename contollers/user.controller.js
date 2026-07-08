@@ -25,15 +25,12 @@ const registerUser = asyncHandler(async (req, res) => {
     //create user obj-create db entry
     // remove pass and refresh token from field response->check for user creaton
     //return res
-    const username = req.body.username?.trim()
-    const email = req.body.email?.trim().toLowerCase()
-    const password = req.body.password?.trim()
+    const username = req.body?.username?.trim()
+    const email = req.body?.email?.trim().toLowerCase()
+    const password = req.body?.password?.trim()
 
-    if (
-        [username, email, password].some((field) =>
-            field?.trim() === "")
-    ) {
-        throw new ApiError(400, "All field are required")
+    if (!username || !email || !password) {
+        throw new ApiError(400, "All fields are required")
     }
 
     const exsistedUser = await User.findOne({
