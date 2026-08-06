@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { upload } from "../middlewares/multer.js"
 import { verifyJWT } from "../middlewares/auth.js"
-import { createPost } from "../contollers/post.controller.js"
+import { createPost, deletePost, getAllPosts, getPostById, updatePost } from "../contollers/post.controller.js"
 const router = Router()
 
 router
@@ -11,9 +11,7 @@ router
         upload.single("coverImage"),
         createPost
     )
-
-// GET all posts not implemented yet — return 501 until implemented
-router.get('/', (req, res) => res.status(501).json({ status: 501, data: null, message: 'Not implemented' }));
+    .get(getAllPosts)
 
 
 
