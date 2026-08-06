@@ -74,9 +74,23 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while creating a user")
     }
 
-    return res.status(201).json(
-        new ApiResponse(200, createdUser, "user registered Successfully")
-    )
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id)
+
+    const options = {
+        httpOnly: true,
+        secure: false
+    }
+
+    return res.status(201)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(201, {
+                user: createdUser,
+                accessToken,
+                refreshToken
+            }, "user registered Successfully")
+        )
 
 })
 
@@ -182,16 +196,16 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         if (incomingRefreshToken !== user?.refreshToken) {
             throw new ApiError(401, "refresh token is expired")
         }
-        const option = {
+        const options = {
             httpOnly: true,
             secure: true
         }
 
-        await generateAccessAndRefreshTokens(user._id)
+        const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshTokens(user._id)
 
         return res.status(200)
             .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", refreshToken, options)
+            .cookie("refreshToken", newRefreshToken, options)
             .json(
                 new ApiResponse(
                     200,

@@ -21,7 +21,7 @@ const likeSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Prevent a user from liking the exact same post or comment more than once
-likeSchema.index({ user: 1, likedItem: 1 }, { unique: true });
+likeSchema.index({ user: 1, likedItem: 1, itemType: 1 }, { unique: true });
 
 const Like = mongoose.model('Like', likeSchema);
 export default Like;
