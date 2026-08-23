@@ -377,5 +377,7 @@ const swaggerDocument = {
     },
   },
 };
-
-export default swaggerDocument;
+    {
+      url: 'https://backend-projects-omega.vercel.app',
+      description: 'Production server',
+    },

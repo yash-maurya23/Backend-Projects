@@ -15,12 +15,11 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+// Serve Swagger UI files explicitly under /api-docs to avoid asset routing issues
 app.use(
     "/api-docs",
-    swaggerUI.serve,
-    swaggerUI.setup(swaggerDocument, {
-        explorer: true,
-    })
+    swaggerUI.serveFiles(swaggerDocument, { explorer: true }),
+    swaggerUI.setup(swaggerDocument, { explorer: true })
 );
 
 //routes
@@ -37,9 +36,10 @@ app.use("/api/v1/likes", likeRouter)
 
 // root route for serverless platforms that invoke this module directly
 app.get('/', (req, res) => {
+    const docsUrl = 'https://backend-projects-omega.vercel.app/api-docs';
     res.json({
-        message: 'Blog API is running',
-        documentation: '/api-docs'
+        message: 'This is the Blog API home. To view the Swagger documentation or interact with the backend, visit the URL below.',
+        documentation: docsUrl
     });
 });
 
