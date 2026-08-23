@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
+import swaggerUiDist from "swagger-ui-dist";
 import swaggerDocument from "./swagger.js";
 
 import userRouter from "./routes/user.routes.js";
@@ -11,28 +12,39 @@ import likeRouter from "./routes/like.routes.js";
 
 const app = express();
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}));
+
+// Middleware
+app.use(
+    cors({
+        origin: process.env.CORS_ORIGIN,
+        credentials: true
+    })
+);
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+
 // Swagger
+const swaggerDistPath = swaggerUiDist.getAbsoluteFSPath();
+
+app.use("/api-docs", express.static(swaggerDistPath));
+
 app.use(
     "/api-docs",
     swaggerUI.serve,
     swaggerUI.setup(swaggerDocument)
 );
 
-// Routes
+
+// API Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/likes", likeRouter);
+
 
 // Home
 app.get("/", (req, res) => {
@@ -42,7 +54,8 @@ app.get("/", (req, res) => {
     });
 });
 
-// Error handler
+
+// Error Handler
 app.use((err, req, res, next) => {
     console.error(err);
 
