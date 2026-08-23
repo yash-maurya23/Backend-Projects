@@ -29,5 +29,10 @@ app.use("/api/v1/posts", postRouter)
 app.use("/api/v1/comments", commentRouter)
 app.use("/api/v1/likes", likeRouter)
 
+// root route for serverless platforms that invoke this module directly
+app.get('/', (req, res) => {
+    res.send("kya haal hai?");
+});
+
 export { app }
 export default app
