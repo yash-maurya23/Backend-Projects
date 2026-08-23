@@ -31,7 +31,10 @@ app.use("/api/v1/likes", likeRouter)
 
 // root route for serverless platforms that invoke this module directly
 app.get('/', (req, res) => {
-    res.send("kya haal hai?");
+    res.json({
+        message: 'Blog API is running',
+        documentation: '/api-docs'
+    });
 });
 
 export { app }
