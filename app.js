@@ -15,6 +15,15 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+// Capture uncaught exceptions and unhandled promise rejections so Vercel logs show stack traces
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err && err.stack ? err.stack : err);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection:', reason && reason.stack ? reason.stack : reason);
+});
+
 // Serve Swagger UI files explicitly under /api-docs to avoid asset routing issues
 app.use(
     "/api-docs",
@@ -41,6 +50,13 @@ app.get('/', (req, res) => {
         message: 'This is the Blog API home. To view the Swagger documentation or interact with the backend, visit the URL below.',
         documentation: docsUrl
     });
+});
+
+// Generic Express error handler to ensure errors are logged and returned as JSON
+app.use((err, req, res, next) => {
+    console.error('Express error:', err && err.stack ? err.stack : err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || 'Internal Server Error' });
 });
 
 export { app }
