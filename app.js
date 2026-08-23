@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
+import swaggerUiDist from "swagger-ui-dist";
 import swaggerDocument from "./swagger.js";
 
 import userRouter from "./routes/user.routes.js";
@@ -27,6 +28,11 @@ app.use(cookieParser());
 
 
 // Swagger
+app.use(
+    "/api-docs",
+    express.static(swaggerUiDist.getAbsoluteFSPath(), { index: false })
+);
+
 app.use(
     "/api-docs",
     swaggerUI.serve,
