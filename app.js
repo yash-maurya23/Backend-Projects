@@ -30,3 +30,4 @@ app.use("/api/v1/comments", commentRouter)
 app.use("/api/v1/likes", likeRouter)
 
 export { app }
+export default app
