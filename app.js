@@ -15,7 +15,13 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(
+    "/api-docs",
+    swaggerUI.serve,
+    swaggerUI.setup(swaggerDocument, {
+        explorer: true,
+    })
+);
 
 //routes
 import userRouter from './routes/user.routes.js'

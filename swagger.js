@@ -11,7 +11,7 @@ const swaggerDocument = {
       description: 'Local development server',
     },
       {
-      url: 'https://backend-projects-git-blogapi-yash-mauryas-projects-9b5c8d04.vercel.app/',
+      url: 'https://backend-projects-omega.vercel.app/',
       description: 'Production server',
     },
   ],
