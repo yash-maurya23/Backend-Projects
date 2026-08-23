@@ -4,6 +4,11 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerDocument from "./swagger.js";
 
+import userRouter from "./routes/user.routes.js";
+import postRouter from "./routes/post.routes.js";
+import commentRouter from "./routes/comment.routes.js";
+import likeRouter from "./routes/like.routes.js";
+
 const app = express();
 
 app.use(cors({
@@ -16,29 +21,20 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-
 // Swagger
 app.use(
     "/api-docs",
     swaggerUI.serve,
-    swaggerUI.setup(swaggerDocument, {
-        explorer: true
-    })
+    swaggerUI.setup(swaggerDocument)
 );
 
-
 // Routes
-import userRouter from "./routes/user.routes.js";
-import postRouter from "./routes/post.routes.js";
-import commentRouter from "./routes/comment.routes.js";
-import likeRouter from "./routes/like.routes.js";
-
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/likes", likeRouter);
 
-
+// Home
 app.get("/", (req, res) => {
     res.json({
         message: "This is the Blog API home.",
@@ -46,13 +42,11 @@ app.get("/", (req, res) => {
     });
 });
 
-
+// Error handler
 app.use((err, req, res, next) => {
-    console.error("Express error:", err?.stack || err);
+    console.error(err);
 
-    const status = err.status || 500;
-
-    res.status(status).json({
+    res.status(err.status || 500).json({
         error: err.message || "Internal Server Error"
     });
 });
