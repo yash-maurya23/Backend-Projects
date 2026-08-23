@@ -10,6 +10,10 @@ const swaggerDocument = {
       url: 'http://localhost:3000',
       description: 'Local development server',
     },
+      {
+      url: 'https://backend-projects-git-blogapi-yash-mauryas-projects-9b5c8d04.vercel.app/',
+      description: 'Production server',
+    },
   ],
   components: {
     securitySchemes: {
